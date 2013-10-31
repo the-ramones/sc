@@ -2,6 +2,7 @@ package sc.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import sc.model.User;
 import sc.repository.UserRepository;
@@ -39,5 +40,11 @@ public class UserServiceJpa implements UserService {
         StringBuilder sb = new StringBuilder(512);
         sb.append(user.getFirstname()).append(' ').append(user.getLastname());
         return sb.toString();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addUser(User user) {
+        userRepository.saveUser(user);
     }
 }

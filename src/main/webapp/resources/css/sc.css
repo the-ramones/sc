@@ -3,10 +3,31 @@
     Created on : Oct 30, 2013, 8:48:47 PM
     Author     : Paul Kulitski
     Description:
-        Scand Java jQuery MVC test
+        Scand Java jQuery MVC Test
 */
+
+html, body {
+    
+}
 
 .container { 
     display: block;
 }
 
+#form-login {
+        padding: 10px;
+    margin: 10px;
+}
+
+#error {
+    color: tomato;
+    text-align: center
+}
+
+span.user {
+    text-align: center;
+}
+
+form {
+
+}

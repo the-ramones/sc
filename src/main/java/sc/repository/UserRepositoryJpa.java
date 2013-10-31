@@ -17,8 +17,8 @@ public class UserRepositoryJpa implements UserRepository {
     @PersistenceContext(name = "scPU")
     EntityManager em;
 
-    private String LOOKUP_PASSWORD_QUERY = "select u.password from User u where u.username = :username";
-    private String GET_LANGUAGE_QUERY = "select u.language from User u where u.username = :username";
+    private String LOOKUP_PASSWORD_QUERY = "select u.password from User u where u.login = :username";
+    private String GET_LANGUAGE_QUERY = "select u.language from User u where u.login = :username";
     private String GET_FULLNAME_QUERY = "select u from User u where u.username= :username";
     
     @Override
@@ -40,4 +40,12 @@ public class UserRepositoryJpa implements UserRepository {
         User user = em.find(User.class, username);
         return user;
     }
+
+    @Override
+    public void saveUser(User user) {
+        System.out.println("SAVE USER: " + user);
+        em.merge(user);
+    }
+    
+    
 }

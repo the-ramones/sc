@@ -32,11 +32,16 @@
         <property name="persistenceUnitName" value="scPU" />
         <property name="jpaPropertyMap">
             <props>
+                <!--<prop key="hibernate.hbm2ddl.auto">create-drop</prop>-->
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
             </props>
         </property>
         <property name="jpaDialect" ref="jpaDialect" />
         <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+    </bean>
+    
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="scEm" />
     </bean>
     
     <tx:annotation-driven />
@@ -47,4 +52,10 @@
           class="org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder">
         <constructor-arg value="SHA-1" />
     </bean>
+    
+    <bean id="md5Hasher" 
+          class="org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder">
+        <constructor-arg value="MD5"/>
+    </bean>
+    
 </beans>

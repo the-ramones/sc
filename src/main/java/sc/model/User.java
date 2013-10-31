@@ -13,7 +13,7 @@ import javax.persistence.Table;
  * @author Paul Kulitski
  */
 @Entity
-@Table(name = "users", schema = "sc")
+@Table(name = "users")
 public class User implements Serializable {
 
     private String login;
@@ -22,8 +22,19 @@ public class User implements Serializable {
     private String lastname;
     private String language;
 
+    public User() {
+    }
+
+    public User(String login, String password, String firstname, String lastname, String language) {
+        this.login = login;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.language = language;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "login", unique = true, nullable = false, length = 40)
     public String getLogin() {
         return login;
@@ -46,7 +57,7 @@ public class User implements Serializable {
     public String getFirstname() {
         return firstname;
     }
-    
+
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
@@ -60,12 +71,17 @@ public class User implements Serializable {
         this.lastname = lastname;
     }
 
-    @Column(name = "\"Language\"", length = 2)
+    @Column(name = "`Language`", length = 2, nullable = true)
     public String getLanguage() {
         return language;
     }
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "login=" + login + ", password=" + password + ", firstname=" + firstname + ", lastname=" + lastname + ", language=" + language + '}';
     }
 }

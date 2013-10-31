@@ -1,5 +1,7 @@
 package sc.service;
 
+import sc.model.User;
+
 /**
  * Contract for User services
  *
@@ -12,4 +14,6 @@ public interface UserService {
     public String getLanguage(String username);
     
     public String getFullName(String username);
+    
+    public void addUser(User user);
 }

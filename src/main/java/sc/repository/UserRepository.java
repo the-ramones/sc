@@ -14,4 +14,6 @@ public interface UserRepository {
     public String getLanguage(String username);
 
     public User getUser(String username);
+    
+    public void saveUser(User user);
 }
