@@ -18,7 +18,7 @@
         </select> <br />
         <label for="rememberme"><spring:message code="login.rememberme" />?</label>
         <input type="checkbox" id="rememberme" name="rememberMe" /> <br />
-        <label id="error" class="invisible"></label> 
+        <label id="error" class="error" class="invisible"></label> 
         <input type="button" id="confirm" name="confirm" value="<spring:message code="login.enter" />" />
     </form>
 </div>

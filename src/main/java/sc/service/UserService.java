@@ -16,4 +16,6 @@ public interface UserService {
     public String getFullName(String username);
     
     public void addUser(User user);
+    
+    public User getUser(String username);
 }

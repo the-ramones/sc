@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sc.ajax.AjaxState;
+import sc.model.User;
 import sc.service.UserService;
 
 /**
@@ -39,44 +40,75 @@ public class LoginController {
     MessageSource messageSource;
     private static String AUTH_COOKIE_NAME = "SC_SESSION_COOKIE";
     private static String REMEMBERME_COOKIE_NAME = "SC_REMEMBER_ME_COOKIE";
-    private static int SESSION_EXPIRATION_TIME = 84600;
+    private static int SESSION_EXPIRATION_TIME = 30 * 60;
     protected static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    /**
+     * Invalidate http session, remove connected cookies
+     * @param session
+     * @param res
+     * @return 
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public @ResponseBody
-    String setupLoginForm(HttpSession session, HttpServletRequest req,
-            HttpServletResponse res, Model model) {
+    String doLogout(HttpSession session, HttpServletResponse res) {
         try {
-            session.invalidate();
             Cookie cookie = new Cookie(AUTH_COOKIE_NAME, "");
             cookie.setMaxAge(0);
             res.addCookie(cookie);
+            
+            session.invalidate();
         } catch (IllegalStateException ex) {
             logger.info("Attempt to invalidate already invalidated session");
         }
         return AjaxState.SUCCESS;
     }
 
+    /**
+     * Performs http authentication of a new user
+     *
+     * @param username username
+     * @param password password
+     * @param rememberMe is user want to be remembered?
+     * @param res http response
+     * @param session http session
+     * @param model model
+     * @return
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody
-    String doAuth(@RequestParam(value = "login") String username,
+    String doLogin(@RequestParam(value = "login") String username,
             @RequestParam String password, @RequestParam(required = false) boolean rememberMe,
             HttpServletResponse res, HttpSession session, Model model) {
         String encPassword = passwordEncoder.encodePassword(password, null);
-        String sessionId = md5Hasher.encodePassword(username, null);
+
         if (userService.checkCredentails(username, encPassword)) {
-            Cookie cookie = new Cookie(AUTH_COOKIE_NAME, sessionId);
-            cookie.setMaxAge(30 * 60);
-            res.addCookie(cookie);
-//            session.setAttribute("user", userService.);
+            User currentUser = userService.getUser(username);
+            if (currentUser != null) {
+                session.setAttribute("user", currentUser);
 
-            logger.info("User with login {} successfully authenticated into the application", username);
-            return AjaxState.AUTHENTICATED;
-        } else {
+                String sessionId = md5Hasher.encodePassword(username, null);
+                Cookie cookie = new Cookie(AUTH_COOKIE_NAME, sessionId);
+                cookie.setMaxAge(SESSION_EXPIRATION_TIME);
+                res.addCookie(cookie);
 
-            logger.debug("User with login {} cannot be authenticated inti the application", username);
-            return AjaxState.UNAUTHENTICATED;
+                logger.info("User with login {} successfully authenticated into the application", username);
+                return AjaxState.AUTHENTICATED;
+            }
         }
+        logger.debug("User with login {} cannot be authenticated inti the application", username);
+        return AjaxState.UNAUTHENTICATED;
 
+    }
+
+    /**
+     * Renders and returns application login form
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String getLoginForm(Model model) {
+        return "login";
     }
 }

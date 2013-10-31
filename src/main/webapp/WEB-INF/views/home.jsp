@@ -13,10 +13,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><spring:message code="home.title" /></title>
         <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/sc.css" />">
+        <script src="<c:url value="/resources/js/libs/jquery-1.10.2.js" />" type="text/javascript"></script>
     </head>
     <body>
-        <jsp:text>Authenticated: ${authenticated}</jsp:text>
-        <c:out value="${authenticated}" />
         <c:choose>            
             <c:when test="${authenticated}">
                 <jsp:include page="service.jsp" />
@@ -26,7 +25,6 @@
             </c:otherwise>
         </c:choose>
 
-        <script src="<c:url value="/resources/js/libs/jquery-1.10.2.js" />" type="text/javascript"></script>
         <script src="<c:url value="/resources/js/sc.js" />" type="text/javascript"></script>
         <script type="text/javascript">
             $(document).ready(function() {

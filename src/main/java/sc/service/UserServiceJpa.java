@@ -47,4 +47,9 @@ public class UserServiceJpa implements UserService {
     public void addUser(User user) {
         userRepository.saveUser(user);
     }
+    
+    @Override
+    public User getUser(String username) {
+        return userRepository.getUser(username);
+    }
 }

@@ -27,6 +27,10 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>60</session-timeout>
+        <cookie-config>
+            <name>JSESSIONID2</name>
+        </cookie-config>
+        
     </session-config>
     <welcome-file-list>
         <welcome-file>redirect.jsp</welcome-file>
