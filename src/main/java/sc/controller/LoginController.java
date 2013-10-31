@@ -2,6 +2,7 @@ package sc.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,6 @@ import sc.service.UserService;
  * @author Paul Kulitski
  */
 @Controller
-@RequestMapping(value = "/")
 public class LoginController {
 
     @Autowired
@@ -25,6 +25,9 @@ public class LoginController {
     @Autowired
     @Qualifier("sha1Encryptor")
     PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    MessageSource messageSource;
     
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String setupLoginForm(Model model) {
@@ -36,9 +39,9 @@ public class LoginController {
             @RequestParam boolean rememberMe, Model model) {
         passwordEncoder.encodePassword(password, null);
         if (userService.checkCredentails(username, password)) {
-            return "redirect:home";
+            return "success";
         } else {
-            return "login";
+            return "failure";
         }
                 
     }

@@ -4,14 +4,15 @@
     Author     : the-ramones
 --%>
 
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title><spring:message code="home.title" /></title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <jsp:include page="home.jsp" flush="true" />
     </body>
 </html>
