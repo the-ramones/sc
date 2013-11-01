@@ -4,7 +4,7 @@ package sc.ajax;
  *
  * @author Paul Kulitski
  */
-public interface AjaxState {
+public interface AjaxStates {
 
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";

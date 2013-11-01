@@ -7,15 +7,25 @@
 */
 
 html, body {
-    
+    background-color: #ddd;
 }
 
 .container { 
     display: block;
+    position: absolute;
+    margin: 50% 0 0 50%;
+    border: 1px solid black;
+    border-radius: 6px;
+    box-shadow: 0 0 2px #000;
+    text-align: center;
+    width: 400px;
+    height: 200px;
+    top: -200px;
+    left: -200px;
 }
 
 #form-login {
-        padding: 10px;
+    padding: 10px;
     margin: 10px;
 }
 

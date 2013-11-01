@@ -17,10 +17,15 @@
     
     <context:component-scan base-package="sc.controller" />
        
-    <mvc:annotation-driven /> 
+    <mvc:annotation-driven />
     
     <mvc:interceptors>
-        <ref bean="securityInterceptor" />
+        <mvc:interceptor>            
+            <mvc:mapping path="/service" />
+            <mvc:mapping path="/logout" />
+            <mvc:mapping path="/login" />
+            <ref bean="securityInterceptor" />
+        </mvc:interceptor>   
     </mvc:interceptors>
     
     <mvc:resources location="/resources/" mapping="/resources/**" />
@@ -37,12 +42,6 @@
         <property name="cacheSeconds" value="1" />
     </bean>   
     
-    <bean id="localeResolver"
-          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-        <property name="cookieName" value="SCLANG" />
-        <property name="defaultLocale" value="en" />
-    </bean>
-    
-    
+    <bean id="localeResolver" class="sc.resolver.CustomCookieLocaleResolver" />
 
 </beans>

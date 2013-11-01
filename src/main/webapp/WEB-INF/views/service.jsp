@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="sc.model.User"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
@@ -8,7 +9,7 @@
         <spring:message code="lang" />
     </div><img src="" />
     <p><a id="logout" href="<spring:url value="/logout" />"><spring:message code="logout" /></a>
-    <label class="error"></label>
+    <label class="error invisible"></label>
 </p>
 </div>
 
@@ -38,6 +39,5 @@
             $("body").empty();
             $("body").load("<c:url value="/login" />");
         } 
-    }
-    
+    }    
 </script>

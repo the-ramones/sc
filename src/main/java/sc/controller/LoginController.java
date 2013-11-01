@@ -1,7 +1,7 @@
 package sc.controller;
 
+import java.util.Locale;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sc.ajax.AjaxState;
+import sc.ajax.AjaxStates;
+import sc.ajax.CookieNames;
+import sc.ajax.Languages;
+import sc.ajax.SessionConstants;
 import sc.model.User;
 import sc.service.UserService;
 
@@ -38,30 +42,28 @@ public class LoginController {
     PasswordEncoder md5Hasher;
     @Autowired
     MessageSource messageSource;
-    private static String AUTH_COOKIE_NAME = "SC_SESSION_COOKIE";
-    private static String REMEMBERME_COOKIE_NAME = "SC_REMEMBER_ME_COOKIE";
-    private static int SESSION_EXPIRATION_TIME = 30 * 60;
     protected static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     /**
      * Invalidate http session, remove connected cookies
+     *
      * @param session
      * @param res
-     * @return 
+     * @return
      */
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public @ResponseBody
     String doLogout(HttpSession session, HttpServletResponse res) {
         try {
-            Cookie cookie = new Cookie(AUTH_COOKIE_NAME, "");
+            Cookie cookie = new Cookie(CookieNames.SC_AUTH_COOKIE_NAME, "");
             cookie.setMaxAge(0);
             res.addCookie(cookie);
-            
+
             session.invalidate();
         } catch (IllegalStateException ex) {
             logger.info("Attempt to invalidate already invalidated session");
         }
-        return AjaxState.SUCCESS;
+        return AjaxStates.SUCCESS;
     }
 
     /**
@@ -78,26 +80,45 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody
     String doLogin(@RequestParam(value = "login") String username,
-            @RequestParam String password, @RequestParam(required = false) boolean rememberMe,
+            @RequestParam String password,
+            @RequestParam(required = false) boolean rememberMe,
+            @RequestParam(required = false) String language,
             HttpServletResponse res, HttpSession session, Model model) {
         String encPassword = passwordEncoder.encodePassword(password, null);
 
         if (userService.checkCredentails(username, encPassword)) {
             User currentUser = userService.getUser(username);
             if (currentUser != null) {
-                session.setAttribute("user", currentUser);
+                session.setAttribute(SessionConstants.SC_USER, currentUser);
+                session.setAttribute(SessionConstants.AUTHENTICATED, Boolean.TRUE);
 
-                String sessionId = md5Hasher.encodePassword(username, null);
-                Cookie cookie = new Cookie(AUTH_COOKIE_NAME, sessionId);
-                cookie.setMaxAge(SESSION_EXPIRATION_TIME);
+                String sessionId = md5Hasher.encodePassword(username, Math.random());
+                Cookie cookie = new Cookie(CookieNames.SC_AUTH_COOKIE_NAME, sessionId);
+                cookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
                 res.addCookie(cookie);
 
+                String lang;
+                if (language != null && Languages.supports(language)) {
+                    lang = language.trim().toLowerCase();
+                } else {
+                    lang = userService.getLanguage(username);
+                    if (lang == null || lang.isEmpty()) {
+                        lang = Languages.DEFAULT;
+                    }
+                }
+                if (lang != null) {
+                    Cookie langCookie = new Cookie(CookieNames.SC_USER_LANGUAGE, lang);
+                    cookie.setMaxAge(CookieNames.LANG_EXPIRATION_TIME);
+                    res.addCookie(langCookie);
+                    LocaleContextHolder.setLocale(Locale.forLanguageTag(lang));
+                }
+
                 logger.info("User with login {} successfully authenticated into the application", username);
-                return AjaxState.AUTHENTICATED;
+                return AjaxStates.AUTHENTICATED;
             }
         }
         logger.debug("User with login {} cannot be authenticated inti the application", username);
-        return AjaxState.UNAUTHENTICATED;
+        return AjaxStates.UNAUTHENTICATED;
 
     }
 
