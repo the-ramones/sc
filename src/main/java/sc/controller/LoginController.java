@@ -96,6 +96,8 @@ public class LoginController {
                 Cookie cookie = new Cookie(CookieNames.SC_AUTH_COOKIE_NAME, sessionId);
                 if (rememberMe == true) {
                     cookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
+                } else {
+                    cookie.setMaxAge(-1);
                 }
                 res.addCookie(cookie);
 

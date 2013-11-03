@@ -21,7 +21,7 @@ public class CustomCookieLocaleResolver implements LocaleResolver {
     private String langCookieName;
     private final String REQUEST_LOCALE_ATTRIBUTE_NAME = "SC_REQUEST_ATTRIBUTE_LOCALE";
     protected final static Logger logger = LoggerFactory.getLogger(CustomCookieLocaleResolver.class);
-    
+
     public CustomCookieLocaleResolver() {
         try {
             defaultLocale = Locale.forLanguageTag(Languages.DEFAULT);
@@ -56,7 +56,11 @@ public class CustomCookieLocaleResolver implements LocaleResolver {
             return locale;
         }
         Cookie langCookie = WebUtils.getCookie(request, langCookieName);
+
         if (langCookie != null) {
+            System.out.println("RESOLVE LOCALE: " + langCookie.getValue());
+            System.out.println("PATH: " + langCookie.getPath());
+            System.out.println("COOKIE: " + langCookie);
             try {
                 locale = Locale.forLanguageTag(langCookie.getValue());
             } catch (NullPointerException ex) {
@@ -66,19 +70,19 @@ public class CustomCookieLocaleResolver implements LocaleResolver {
                 request.setAttribute(REQUEST_LOCALE_ATTRIBUTE_NAME, locale);
                 return locale;
             }
-        }        
+        }
         return determineDefaultLocale(request);
     }
-    
+
     @Override
     public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
         System.out.println("IN SET LOCALE");
         Cookie cookie;
         if (locale != null) {
-            request.setAttribute(REQUEST_LOCALE_ATTRIBUTE_NAME, locale);            
+            request.setAttribute(REQUEST_LOCALE_ATTRIBUTE_NAME, locale);
             cookie = new Cookie(langCookieName, locale.toString());
             cookie.setMaxAge(CookieNames.LANG_EXPIRATION_TIME);
-            response.addCookie(cookie);            
+            response.addCookie(cookie);
         } else {
             request.setAttribute(langCookieName, determineDefaultLocale(request));
             cookie = new Cookie(langCookieName, "");
