@@ -19,12 +19,11 @@
        
     <mvc:annotation-driven />
     
-    <mvc:interceptors>
+    <mvc:interceptors>        
         <mvc:interceptor>            
             <mvc:mapping path="/service" />
-            <mvc:mapping path="/logout" />
             <mvc:mapping path="/login" />
-            <ref bean="securityInterceptor" />
+            <bean class="sc.interceptor.SecutiryInterceptor" />
         </mvc:interceptor>   
     </mvc:interceptors>
     

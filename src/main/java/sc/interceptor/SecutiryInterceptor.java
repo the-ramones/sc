@@ -2,10 +2,8 @@ package sc.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import sc.ajax.SessionConstants;
 
 /**
  * Security interceptor
@@ -17,13 +15,11 @@ public class SecutiryInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            Boolean authenticated = (Boolean) session.getAttribute(SessionConstants.AUTHENTICATED);
-            if (authenticated != null && authenticated == true) {
-                return true;
-            }
+        String xRequestedWith = (String) request.getHeader("X-Requested-With");
+        if (xRequestedWith != null && xRequestedWith.equals("XMLHttpRequest")) {
+            return true;
         }
+        request.getRequestDispatcher("/error").forward(request, response);
         return false;
     }
 }

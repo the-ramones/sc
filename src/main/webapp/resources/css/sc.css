@@ -7,26 +7,161 @@
 */
 
 html, body {
-    background-color: #ddd;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    height: 100%;		
+    font-size: 1.2em;
+    font-weight: 100;
+    font-family: "Ubuntu", "Trebuchet MS", Helvetica, sans-serif;
+    background-image: url("../img/back/greengray.png"),
+        url("../img/back/marine.png"), 
+        url("../img/back/sandy.png"),
+        url("../img/back/light.png");
+    background-position: 300px 0px, 
+        200px 0px, 
+        100px 0px, 
+        0px 0px;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .container { 
     display: block;
     position: absolute;
-    margin: 50% 0 0 50%;
-    border: 1px solid black;
+    margin: auto;
+    border: 1px solid #813A26;
     border-radius: 6px;
-    box-shadow: 0 0 2px #000;
+    box-shadow: 0 0 2px #813A26;
+    background-color: #EDDBC3;
     text-align: center;
-    width: 400px;
-    height: 200px;
-    top: -200px;
-    left: -200px;
+    width: 40%;
+    /*height: 65%;*/
+    top: 10%;
+    left: 0;
+    right: 0;
+    /*bottom: 0;*/
+    padding: 18px;
 }
 
-#form-login {
+form {
     padding: 10px;
+}
+
+.form-line {
+    display: block;
+    clear: both;
+}
+
+.form-line input[type="text"],
+.form-line input[type="password"] {
+    float: left;
+    width: 55%;
+    height: 40px;
+    float: right;
+    margin-top: 0;
+    font-size: 1.2em;
+    font-weight: 100;
+    font-family: "Ubuntu", "Trebuchet MS", Helvetica, sans-serif;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    outline: #EDDBC3;
+    text-align: center;
+}
+
+.form-line select {
+    /*width: 200px;*/
+    float: left;
+    /*margin: 10px 10px 0 10px;*/
+    text-align: center;
+    margin-top: 0;
+    width: 55%;
+    height: 36px;
+    float: right;
+    margin-top: 0;
+    font-size: 1.2em;
+    font-weight: 100;
+    font-family: "Ubuntu", "Trebuchet MS", Helvetica, sans-serif;
+    background-color: #fff;
+    overflow: hidden;
+    /*background: url("../img/arrow.jpg") no-repeat right #ddd;*/
+    -webkit-appearance: none;
+    -moz-appearance: window;
+    border: 0px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    outline: #EDDBC3;
+}
+
+.form-line input[type="checkbox"] {
+    float: left;
+    margin: 16px 10px 0 50px;
+}
+
+.form-line input[type="text"]:focus,
+.form-line input[type="password"]:focus,
+.form-line input[type="checkbox"]:focus,
+.form-line select:focus {
+    box-shadow: 0 0 5px tomato;
+}
+
+.form-line select option {
+    height: 64px;
+    background-color: #fff;
+}
+
+.form-line select option[value="en"] {
+    background: url("../img/UnitedKingdom.png") right no-repeat;
+}
+
+.form-line select option[value="ru"] {
+    background: url("../img/Russia.png") right no-repeat;
+}
+
+.form-line select option[value="be"] {
+    background: url("../img/Belarus.png") right no-repeat;
+}
+
+.form-line label {    
+    float:left;
+    text-align: right;
+    width: 160px;   
+    padding-right: 20px;
     margin: 10px;
+    width: 30%;
+    height: 36px;
+    float: left;
+    text-align: right;
+    margin-bottom: 18px;
+
+}
+
+.form-line label.error {
+    margin: 0 auto;
+    display: block;
+    width: 100%;
+    text-align: center;    
+    clear: both;
+    padding-right: 0;
+}
+
+#confirm {
+    width: 50%;
+    height: 36px;
+    border: 1px;
+    border-radius: 2px;
+    background-color: #D94C3A;
+    margin: 0 auto;
+    font-size: 1.2em;
+    font-weight: 100;
+    font-family: "Ubuntu", "Trebuchet MS", Helvetica, sans-serif;
+    color: white;
 }
 
 .error {
@@ -38,6 +173,27 @@ span.user {
     text-align: center;
 }
 
-form {
+.container .info {
+    padding: 20px;
+    float:left;
+}
 
+.container img {
+    float: right;    
+}
+
+#logout {
+    position: absolute;
+    bottom: 18px;
+}
+
+/* helpers */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
 }

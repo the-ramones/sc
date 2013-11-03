@@ -1,6 +1,8 @@
 package sc.controller;
 
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,20 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/service", method = RequestMethod.GET)
-    public String getService(HttpServletRequest request, Model model) {
+    public String getService(HttpServletRequest request, HttpSession session,
+            Locale locale, Model model) {
+        if (locale.equals(Locale.forLanguageTag("be"))) {
+            session.setAttribute("flag", "Belarus-large.png");
+        } else if (locale.equals(Locale.forLanguageTag("ru"))) {
+            session.setAttribute("flag", "Russia-large.png");
+        } else if (locale.equals(Locale.forLanguageTag("en"))) {
+            session.setAttribute("flag", "UnitedKingdom-large.png");
+        }
         return "service";
+    }
+
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String error(HttpServletRequest request, Model model) {
+        return "error";
     }
 }

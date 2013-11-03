@@ -7,8 +7,8 @@
     <div class="info">
         <spring:message code="your.lang" />:<br />
         <spring:message code="lang" />
-    </div><img src="" />
-    <p><a id="logout" href="<spring:url value="/logout" />"><spring:message code="logout" /></a>
+    </div><img class="clearfix" src="<spring:url value="/resources/img/${flag}" />" /><br />
+    <p><a id="logout" href=""><spring:message code="logout" /></a>
     <label class="error invisible"></label>
 </p>
 </div>
@@ -17,7 +17,7 @@
     
     $("#logout").click(function(e) {
         e.preventDefault();
-        $.ajax("<c:url value="/logout" />", {
+        $.ajax("<c:url value="/logout.do" />", {
             method: "POST",
             async: true,
             cache: false,

@@ -51,7 +51,7 @@ public class LoginController {
      * @param res
      * @return
      */
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/logout.do", method = RequestMethod.POST)
     public @ResponseBody
     String doLogout(HttpSession session, HttpServletResponse res) {
         try {
@@ -77,7 +77,7 @@ public class LoginController {
      * @param model model
      * @return
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login.do", method = RequestMethod.POST)
     public @ResponseBody
     String doLogin(@RequestParam(value = "login") String username,
             @RequestParam String password,
@@ -94,7 +94,9 @@ public class LoginController {
 
                 String sessionId = md5Hasher.encodePassword(username, Math.random());
                 Cookie cookie = new Cookie(CookieNames.SC_AUTH_COOKIE_NAME, sessionId);
-                cookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
+                if (rememberMe == true) {
+                    cookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
+                }
                 res.addCookie(cookie);
 
                 String lang;
