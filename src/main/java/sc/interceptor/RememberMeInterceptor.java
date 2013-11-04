@@ -60,6 +60,7 @@ public class RememberMeInterceptor extends HandlerInterceptorAdapter {
                                 //assumed 'remember-me' authentication
 
                                 session = request.getSession();
+                                //TODO: revert from hash?
                                 User currentUser = userService.getUser(username);
                                 System.out.println("PREPARE TO ADD AUTHENTICATED");
                                 if (currentUser != null) {
