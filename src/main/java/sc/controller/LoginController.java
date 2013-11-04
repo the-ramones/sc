@@ -112,7 +112,8 @@ public class LoginController {
                 }
                 if (lang != null) {
                     Cookie langCookie = new Cookie(CookieNames.SC_USER_LANGUAGE, lang);
-                    cookie.setMaxAge(CookieNames.LANG_EXPIRATION_TIME);
+                    System.out.println("LANG COOKIE EXPIRATION TIME: " + CookieNames.LANG_EXPIRATION_TIME);
+                    langCookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
                     res.addCookie(langCookie);
                     LocaleContextHolder.setLocale(Locale.forLanguageTag(lang));
                 }

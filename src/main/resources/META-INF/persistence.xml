@@ -11,5 +11,6 @@
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
     </properties>
     <class>sc.model.User</class>
+    <class>sc.model.Token</class>
   </persistence-unit>
 </persistence>

@@ -13,6 +13,11 @@ CREATE TABLE users(
     PRIMARY KEY(login)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLR rememberme(
+    username VARCHAR(40) NOT NULL,
+    token VARCHAR(40) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 REVOKE ALL ON *.* FROM 'netbeans'@'localhost'; 
 DROP USER 'netbeans'@'localhost';
 CREATE USER 'netbeans'@'localhost' IDENTIFIED BY 'netbeans';
