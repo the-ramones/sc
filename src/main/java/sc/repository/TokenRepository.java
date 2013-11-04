@@ -16,4 +16,6 @@ public interface TokenRepository {
     public void removeToken(Token token);
 
     public void removeToken(String username);
+
+    public void updateToken(Token token);
 }

@@ -27,12 +27,19 @@ public class TokenRepositoryJpa implements TokenRepository {
 
     @Override
     public void removeToken(Token token) {
-        em.remove(token);
+        em.remove(em.merge(token));
     }
 
     @Override
     public void removeToken(String username) {
         Token token = em.find(Token.class, username);
-        em.remove(token);
+        if (token != null) {
+            em.remove(token);
+        }
+    }
+
+    @Override
+    public void updateToken(Token token) {
+        em.merge(token);
     }
 }

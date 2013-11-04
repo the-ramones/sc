@@ -17,4 +17,6 @@ public interface TokenService {
     public void removeToken(String username);
 
     public boolean checkToken(Token token);
+    
+    public void updateToken(String username);
 }

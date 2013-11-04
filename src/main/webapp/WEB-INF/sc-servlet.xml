@@ -23,8 +23,12 @@
         <mvc:interceptor>            
             <mvc:mapping path="/service" />
             <mvc:mapping path="/login" />
-            <bean class="sc.interceptor.SecutiryInterceptor" />
+            <bean class="sc.interceptor.SecurityInterceptor" />
         </mvc:interceptor>   
+        <mvc:interceptor>
+            <mvc:mapping path="/home" />
+            <ref bean="rememberMeInterceptor" />
+        </mvc:interceptor>
     </mvc:interceptors>
     
     <mvc:resources location="/resources/" mapping="/resources/**" />

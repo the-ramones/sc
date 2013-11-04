@@ -21,7 +21,9 @@ import sc.ajax.AjaxStates;
 import sc.ajax.CookieNames;
 import sc.ajax.Languages;
 import sc.ajax.SessionConstants;
+import sc.model.Token;
 import sc.model.User;
+import sc.service.TokenService;
 import sc.service.UserService;
 
 /**
@@ -42,6 +44,8 @@ public class LoginController {
     PasswordEncoder md5Hasher;
     @Autowired
     MessageSource messageSource;
+    @Autowired
+    TokenService tokenService;
     protected static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     /**
@@ -84,6 +88,7 @@ public class LoginController {
             @RequestParam(required = false) boolean rememberMe,
             @RequestParam(required = false) String language,
             HttpServletResponse res, HttpSession session, Model model) {
+
         String encPassword = passwordEncoder.encodePassword(password, null);
 
         if (userService.checkCredentails(username, encPassword)) {
@@ -92,14 +97,28 @@ public class LoginController {
                 session.setAttribute(SessionConstants.SC_USER, currentUser);
                 session.setAttribute(SessionConstants.AUTHENTICATED, Boolean.TRUE);
 
-                String sessionId = md5Hasher.encodePassword(username, Math.random());
-                Cookie cookie = new Cookie(CookieNames.SC_AUTH_COOKIE_NAME, sessionId);
                 if (rememberMe == true) {
-                    cookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
-                } else {
-                    cookie.setMaxAge(-1);
+
+                    //sync?
+                    tokenService.removeToken(username);
+                    System.out.println("USERNAME: " + username);
+                    tokenService.addToken(username);
+                    System.out.println("ADDED NEW TOKEN");
+                    Token token = tokenService.findToken(md5Hasher.encodePassword(username, null));
+                    System.out.println("NEW TOKEN: " + token == null ? token : "null");
+                    if (token != null) {
+                        String sessionId = token.getUsername() + '-' + token.getToken();
+                        System.out.println("LOGIN: " + sessionId);
+
+                        Cookie cookie = new Cookie(CookieNames.SC_AUTH_COOKIE_NAME, sessionId);
+
+                        cookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
+                        res.addCookie(cookie);
+                        System.out.println("COOKIE ADDED");
+                    } else {
+                        logger.warn("Cannot apply a 'Remember Me' authentication. Sync?");
+                    }
                 }
-                res.addCookie(cookie);
 
                 String lang;
                 if (language != null && Languages.supports(language)) {
