@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -16,10 +18,18 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class User implements Serializable {
 
+    @NotNull
     private String login;
+    @NotNull
+    @Size(min = 40, max = 40)
     private transient String password;
+    @NotNull
+    @Size(min = 1, max = 40)
     private String firstname;
+    @NotNull
+    @Size(min = 1, max = 40)
     private String lastname;
+    @Size(min = 1, max = 2)
     private String language;
 
     public User() {

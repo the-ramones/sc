@@ -43,17 +43,17 @@ public class RememberMeInterceptor extends HandlerInterceptorAdapter {
             for (Cookie cookie : request.getCookies()) {
                 if (cookie.getName().equals(CookieNames.SC_AUTH_COOKIE_NAME)) {
                     try {
-                        System.out.println("INTERCEPTOR: " + cookie.getName() + " : [" + cookie.getValue() + "]");
+                        logger.debug("Remember-me interceptor: " + cookie.getName() + " : [" + cookie.getValue() + "]");
                         String[] split = cookie.getValue().split("-");
                         String usernameHash = split[0];
                         String token = split[1];
-                        System.out.println("SPLIT. TOKEN : { " + usernameHash + " , " + token + "}");
+                        logger.debug("Received token : { " + usernameHash + " , " + token + "}");
                         Token originToken = tokenService.findTokenByHash(usernameHash);
                         if (originToken != null) {
                             originTokenUsername = originToken.getUsername();
                             originTokenValue = originToken.getToken();
                         }
-                        System.out.println("TOKEN : { " + originTokenUsername + " , " + originTokenValue + ",}");
+                        logger.debug("Original token : { " + originTokenUsername + " , " + originTokenValue + ",}");
                         if (token != null && originTokenValue != null) {
 
                             if (token.equals(originTokenValue)) {
@@ -63,9 +63,9 @@ public class RememberMeInterceptor extends HandlerInterceptorAdapter {
                                 //TODO: revert from hash?
                                 
                                 User currentUser = userService.getUser(originTokenUsername);
-                                System.out.println("PREPARE TO ADD AUTHENTICATED");
+                                logger.debug("Preparing to add 'authenticated' record to the session");
                                 if (currentUser != null) {
-                                    System.out.println("ADDED AUTHENTICATED AND CURRENT USER");
+                                    logger.debug("Added 'authenticated' record to the session");
                                     session.setAttribute(SessionConstants.SC_USER, currentUser);
                                     session.setAttribute(SessionConstants.AUTHENTICATED, Boolean.TRUE);
                                 }
@@ -83,7 +83,7 @@ public class RememberMeInterceptor extends HandlerInterceptorAdapter {
                         isMalformedRememberMe = true;
                     }
                     if (isMalformedRememberMe) {
-                        System.out.println("MALFORMED COOKIE");
+                        logger.debug("Malformed 'remember-me' cookie received");
                         // assumed 'remember-me' cookie stolen
                         if (originTokenUsername != null) {
                             tokenService.removeToken(originTokenUsername);

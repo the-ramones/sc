@@ -58,9 +58,6 @@ public class CustomCookieLocaleResolver implements LocaleResolver {
         Cookie langCookie = WebUtils.getCookie(request, langCookieName);
 
         if (langCookie != null) {
-            System.out.println("RESOLVE LOCALE: " + langCookie.getValue());
-            System.out.println("PATH: " + langCookie.getPath());
-            System.out.println("COOKIE: " + langCookie);
             try {
                 locale = Locale.forLanguageTag(langCookie.getValue());
             } catch (NullPointerException ex) {
@@ -76,7 +73,6 @@ public class CustomCookieLocaleResolver implements LocaleResolver {
 
     @Override
     public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
-        System.out.println("IN SET LOCALE");
         Cookie cookie;
         if (locale != null) {
             request.setAttribute(REQUEST_LOCALE_ATTRIBUTE_NAME, locale);

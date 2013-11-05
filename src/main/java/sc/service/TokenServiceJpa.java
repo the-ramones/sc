@@ -29,8 +29,6 @@ public class TokenServiceJpa implements TokenService {
     @Override
     public Token findToken(String username) {
         Token token = tokenRepository.getToken(username);
-        System.out.println("IN SERVICE: username " + username);
-        System.out.println("TOKED IN SERVICE: " + token);
         return token;
     }
 
@@ -51,7 +49,7 @@ public class TokenServiceJpa implements TokenService {
             tokenValue = md5Hasher.encodePassword(tokenValue, Math.random() * 1000 % 1);
         }
         token.setToken(tokenValue);
-        System.out.println("GENERATED: {" + hashedUsername + " , " + tokenValue + "}");
+        logger.debug("A new token denerated: {" + hashedUsername + " , " + tokenValue + "}");
         tokenRepository.addToken(token);
     }
 
@@ -88,7 +86,7 @@ public class TokenServiceJpa implements TokenService {
             tokenValue = md5Hasher.encodePassword(tokenValue, Math.random() * 1000 % 1);
         }
         token.setToken(tokenValue);
-        System.out.println("GENERATED: {" + hashedUsername + " , " + tokenValue + "}");
+        logger.debug("A new token generated: {" + hashedUsername + " , " + tokenValue + "}");
         tokenRepository.updateToken(token);
 
     }
@@ -120,7 +118,7 @@ public class TokenServiceJpa implements TokenService {
             tokenValue = md5Hasher.encodePassword(tokenValue, Math.random() * 1000 % 1);
         }
         token.setToken(tokenValue);
-        System.out.println("GENERATED: {" + hash + " , " + tokenValue + "}");
+        logger.debug("A new token generated: {" + hash + " , " + tokenValue + "}");
         tokenRepository.addToken(token);
     }
 }

@@ -56,7 +56,7 @@ public class UserRepositoryJpa implements UserRepository {
 
     @Override
     public void saveUser(User user) {
-        System.out.println("SAVE USER: " + user);
+        logger.debug("Saving user: " + user);
         em.merge(user);
     }
 }

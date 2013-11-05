@@ -101,20 +101,17 @@ public class LoginController {
 
                     //sync?
                     tokenService.removeToken(username);
-                    System.out.println("USERNAME: " + username);
                     tokenService.addToken(username);
-                    System.out.println("ADDED NEW TOKEN");
+                    logger.debug("Added a new token");
                     Token token = tokenService.findToken(username);
-                    System.out.println("NEW TOKEN: " + (token == null ? token : "null"));
                     if (token != null) {
                         String sessionId = token.getHashedUsername() + '-' + token.getToken();
-                        System.out.println("LOGIN: " + sessionId);
 
                         Cookie cookie = new Cookie(CookieNames.SC_AUTH_COOKIE_NAME, sessionId);
 
                         cookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
                         res.addCookie(cookie);
-                        System.out.println("COOKIE ADDED");
+                        logger.debug("Remember-me cookie has been added");
                     } else {
                         logger.warn("Cannot apply a 'Remember Me' authentication. Sync?");
                     }
@@ -131,7 +128,6 @@ public class LoginController {
                 }
                 if (lang != null) {
                     Cookie langCookie = new Cookie(CookieNames.SC_USER_LANGUAGE, lang);
-                    System.out.println("LANG COOKIE EXPIRATION TIME: " + CookieNames.LANG_EXPIRATION_TIME);
                     langCookie.setMaxAge(CookieNames.SESSION_EXPIRATION_TIME);
                     res.addCookie(langCookie);
                     LocaleContextHolder.setLocale(Locale.forLanguageTag(lang));

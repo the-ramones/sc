@@ -29,7 +29,6 @@ public class I18nController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         if (code != null && !code.isEmpty()) {
-            System.out.println("MESSAGE: " + messageSource.getMessage(code, null, locale));
 
             return new ResponseEntity<String>(messageSource.getMessage(code, null, locale), headers, HttpStatus.OK);
         }
