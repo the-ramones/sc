@@ -14,6 +14,7 @@ import javax.persistence.Table;
 public class Token {
 
     private String username;
+    private String hashedUsername;
     private transient String token;
 
     public Token() {
@@ -41,6 +42,15 @@ public class Token {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Column(name = "hashed", length = 40)
+    public String getHashedUsername() {
+        return hashedUsername;
+    }
+
+    public void setHashedUsername(String hashedUsername) {
+        this.hashedUsername = hashedUsername;
     }
 
     @Override

@@ -104,10 +104,10 @@ public class LoginController {
                     System.out.println("USERNAME: " + username);
                     tokenService.addToken(username);
                     System.out.println("ADDED NEW TOKEN");
-                    Token token = tokenService.findToken(md5Hasher.encodePassword(username, null));
-                    System.out.println("NEW TOKEN: " + token == null ? token : "null");
+                    Token token = tokenService.findToken(username);
+                    System.out.println("NEW TOKEN: " + (token == null ? token : "null"));
                     if (token != null) {
-                        String sessionId = token.getUsername() + '-' + token.getToken();
+                        String sessionId = token.getHashedUsername() + '-' + token.getToken();
                         System.out.println("LOGIN: " + sessionId);
 
                         Cookie cookie = new Cookie(CookieNames.SC_AUTH_COOKIE_NAME, sessionId);

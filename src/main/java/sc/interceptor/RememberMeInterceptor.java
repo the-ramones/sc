@@ -45,10 +45,10 @@ public class RememberMeInterceptor extends HandlerInterceptorAdapter {
                     try {
                         System.out.println("INTERCEPTOR: " + cookie.getName() + " : [" + cookie.getValue() + "]");
                         String[] split = cookie.getValue().split("-");
-                        String username = split[0];
+                        String usernameHash = split[0];
                         String token = split[1];
-                        System.out.println("SPLIT. TOKEN : { " + username + " , " + token + "}");
-                        Token originToken = tokenService.findToken(username);
+                        System.out.println("SPLIT. TOKEN : { " + usernameHash + " , " + token + "}");
+                        Token originToken = tokenService.findTokenByHash(usernameHash);
                         if (originToken != null) {
                             originTokenUsername = originToken.getUsername();
                             originTokenValue = originToken.getToken();
@@ -61,7 +61,8 @@ public class RememberMeInterceptor extends HandlerInterceptorAdapter {
 
                                 session = request.getSession();
                                 //TODO: revert from hash?
-                                User currentUser = userService.getUser(username);
+                                
+                                User currentUser = userService.getUser(originTokenUsername);
                                 System.out.println("PREPARE TO ADD AUTHENTICATED");
                                 if (currentUser != null) {
                                     System.out.println("ADDED AUTHENTICATED AND CURRENT USER");

@@ -35,11 +35,17 @@ public class TokenServiceJpa implements TokenService {
     }
 
     @Override
+    public Token findTokenByHash(String hash) {
+        return tokenRepository.getTokenByHash(hash);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void addToken(String username) {
         Token token = new Token();
+        token.setUsername(username);
         String hashedUsername = md5Hasher.encodePassword(username, null);
-        token.setUsername(hashedUsername);
+        token.setHashedUsername(hashedUsername);
         String tokenValue = username;
         for (int i = 0; i < 10; i++) {
             tokenValue = md5Hasher.encodePassword(tokenValue, Math.random() * 1000 % 1);
@@ -58,17 +64,33 @@ public class TokenServiceJpa implements TokenService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void removeToken(String username) {
-        String hashed = hashUsername(username);
-        tokenRepository.removeToken(hashed);
+        tokenRepository.removeToken(username);
     }
 
     @Override
     public boolean checkToken(Token token) {
-        Token origin = tokenRepository.getToken(token.getUsername());
+        Token origin = tokenRepository.getTokenByHash(token.getUsername());
         if (origin.getToken().equals(token.getToken())) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateToken(String username) {
+        Token token = findToken(username);
+        token.setUsername(username);
+        String hashedUsername = md5Hasher.encodePassword(username, null);
+        token.setHashedUsername(hashedUsername);
+        String tokenValue = username;
+        for (int i = 0; i < 10; i++) {
+            tokenValue = md5Hasher.encodePassword(tokenValue, Math.random() * 1000 % 1);
+        }
+        token.setToken(tokenValue);
+        System.out.println("GENERATED: {" + hashedUsername + " , " + tokenValue + "}");
+        tokenRepository.updateToken(token);
+
     }
 
     private String hashUsername(String username) {
@@ -82,18 +104,23 @@ public class TokenServiceJpa implements TokenService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void updateToken(String username) {
-        Token token = findToken(username);
+    public void removeTokenByHash(String hash) {
+        Token token = findTokenByHash(hash);
+        if (token != null) {
+            removeToken(token);
+        }
+    }
 
-        String hashedUsername = md5Hasher.encodePassword(username, null);
-        String tokenValue = username;
+    @Override
+    public void addTokenByHash(String hash) {
+        Token token = new Token();
+        token.setUsername(hash);
+        String tokenValue = hash;
         for (int i = 0; i < 10; i++) {
             tokenValue = md5Hasher.encodePassword(tokenValue, Math.random() * 1000 % 1);
         }
         token.setToken(tokenValue);
-        System.out.println("GENERATED: {" + hashedUsername + " , " + tokenValue + "}");
-        tokenRepository.updateToken(token);
-
+        System.out.println("GENERATED: {" + hash + " , " + tokenValue + "}");
+        tokenRepository.addToken(token);
     }
 }
