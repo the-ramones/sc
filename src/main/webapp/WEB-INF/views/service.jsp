@@ -7,6 +7,7 @@
     <div class="info">
         <spring:message code="your.lang" />:<br />
         <spring:message code="lang" />
+        
     </div><img class="clearfix" src="<spring:url value="/resources/img/${flag}" />" /><br />
     <p><a id="logout" href=""><spring:message code="logout" /></a>
     <label class="error invisible"></label>

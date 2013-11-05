@@ -17,7 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HomeController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String setupHomePage(Model model) {
+    public String setupHomePage(Locale locale, HttpSession session, Model model) {
+        if (locale.equals(Locale.forLanguageTag("be"))) {
+            session.setAttribute("flag", "Belarus-large.png");
+        } else if (locale.equals(Locale.forLanguageTag("ru"))) {
+            session.setAttribute("flag", "Russia-large.png");
+        } else if (locale.equals(Locale.forLanguageTag("en"))) {
+            session.setAttribute("flag", "UnitedKingdom-large.png");
+        }
         return "home";
     }
 

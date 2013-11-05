@@ -90,7 +90,7 @@ public class LoginController {
             HttpServletResponse res, HttpSession session, Model model) {
 
         String encPassword = passwordEncoder.encodePassword(password, null);
-
+        
         if (userService.checkCredentails(username, encPassword)) {
             User currentUser = userService.getUser(username);
             if (currentUser != null) {

@@ -22,7 +22,7 @@ public class UserServiceJpa implements UserService {
     @Transactional(readOnly = true)
     public boolean checkCredentails(String username, String passwordAttempt) {
         String password = userRepository.lookupPassword(username);
-        if (password.equals(passwordAttempt)) {
+        if (password != null && password.equals(passwordAttempt)) {
             return true;
         } else {
             return false;

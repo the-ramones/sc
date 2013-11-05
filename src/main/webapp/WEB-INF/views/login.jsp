@@ -35,7 +35,7 @@
 </div>
 
 <script type="text/javascript">
-    
+
     $(document).ready(function() {
         $("#confirm").click(function(e) {
             e.preventDefault();
@@ -59,7 +59,10 @@
     }
 
     function onErrorHandler() {
-        $("#error").text("Cannot login due to network error");
+        var msg = "Cannot perform login due to network error";
+        $.post("<c:url value="/i18n" />", {"code": "error.net"}, function(data) {
+            $("#error").text(data);
+        }, 'text');
         $('input[type="password"]').val('');
         $('input[type="checkbox"]').prop("checked", false);
     }
@@ -69,7 +72,10 @@
             $("body").empty();
             $("body").load("<c:url value="/service" />");
         } else {
-            $("#error").text("Check your credentials");
+            var msg = "Check your credentials";
+            $.post("<c:url value="/i18n" />", {"code": "error.invalid"}, function(data) {
+                $("#error").text(data);
+            }, 'text');
             $('input[type="password"]').val('');
             $('input[type="checkbox"]').prop("checked", false);
         }
